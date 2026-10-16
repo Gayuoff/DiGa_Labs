@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from "react";
-import type { Item, Query, Relation } from "../domain";
+import type { Item, Query, Relation, Spec } from "../domain";
 import { type HistoryState, topics, type WorkspaceStore } from "./store";
 
 const StoreContext = createContext<WorkspaceStore | null>(null);
@@ -41,6 +41,16 @@ export function useRelations(itemId: string): readonly Relation[] {
     [store, itemId],
   );
   return useSyncExternalStore(subscribe, () => store.relationsOf(itemId));
+}
+
+/** The workspace spec. Re-renders when the structure changes (edits, undo, AI). */
+export function useWorkspaceSpec(): Spec | null {
+  const store = useStore();
+  const subscribe = useCallback(
+    (onChange: () => void) => store.subscribe(topics.spec, onChange),
+    [store],
+  );
+  return useSyncExternalStore(subscribe, () => store.spec);
 }
 
 export function useHistory(): HistoryState {

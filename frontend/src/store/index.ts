@@ -1,4 +1,12 @@
-export { StoreProvider, useHistory, useItem, useQuery, useRelations, useStore } from "./hooks";
+export {
+  StoreProvider,
+  useHistory,
+  useItem,
+  useQuery,
+  useRelations,
+  useStore,
+  useWorkspaceSpec,
+} from "./hooks";
 export { newId } from "./ids";
 export { type Change, indexedDbPersistence, type Persistence, type Snapshot } from "./persistence";
 export { fieldValue, type Group, groupItems, makeQuery, runQuery } from "./query";

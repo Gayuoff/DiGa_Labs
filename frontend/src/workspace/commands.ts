@@ -24,6 +24,9 @@ export interface CommandContext {
   store: WorkspaceStore;
   navigate: (path: string) => void;
   setMode: (mode: ColorMode) => void;
+  editing: boolean;
+  onToggleEditing: () => void;
+  onNewPage: () => void;
 }
 
 const MODES: { mode: ColorMode; label: string; icon: string; keywords: string }[] = [
@@ -32,7 +35,15 @@ const MODES: { mode: ColorMode; label: string; icon: string; keywords: string }[
   { mode: "system", label: "Match system", icon: "monitor", keywords: "auto appearance" },
 ];
 
-export function buildCommands({ spec, store, navigate, setMode }: CommandContext): Command[] {
+export function buildCommands({
+  spec,
+  store,
+  navigate,
+  setMode,
+  editing,
+  onToggleEditing,
+  onNewPage,
+}: CommandContext): Command[] {
   return [
     ...spec.pages.map((page) => ({
       id: `go:${page.key}`,
@@ -52,6 +63,22 @@ export function buildCommands({ spec, store, navigate, setMode }: CommandContext
         store.create({ type: type.key, title: `Untitled ${type.label.toLowerCase()}` });
       },
     })),
+    {
+      id: "new-page",
+      title: "New page",
+      section: "Workspace",
+      icon: "file-plus",
+      keywords: "add create page",
+      run: onNewPage,
+    },
+    {
+      id: "edit-layout",
+      title: editing ? "Finish editing layout" : "Edit layout",
+      section: "Workspace",
+      icon: "layout-dashboard",
+      keywords: "arrange move resize views customize",
+      run: onToggleEditing,
+    },
     {
       id: "undo",
       title: "Undo",

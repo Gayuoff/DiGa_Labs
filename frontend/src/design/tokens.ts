@@ -88,6 +88,11 @@ const TONES: Record<Tone, ToneStyle> = {
 const RADIUS_PX: Record<Theme["radius"], number> = { none: 0, sm: 4, md: 8, lg: 14 };
 const DENSITY: Record<Theme["density"], number> = { compact: 0.85, comfortable: 1, spacious: 1.2 };
 
+/** Spacing multiplier for a density. --pad is this many rem, --row-h 2.25x it. */
+export function densityScale(density: Theme["density"]): number {
+  return DENSITY[density];
+}
+
 /** Every visual token for a theme. Pure, so the same spec always looks the same. */
 export function themeVars(theme: Theme, dark: boolean): TokenVars {
   const tone = TONES[theme.tone];
@@ -100,6 +105,7 @@ export function themeVars(theme: Theme, dark: boolean): TokenVars {
     "--line": palette.line,
     "--ink": palette.ink,
     "--muted": palette.muted,
+    "--danger": dark ? "#f87171" : "#dc2626",
     "--accent": theme.accent,
     "--accent-fg": accentForeground(theme.accent),
     "--accent-soft": `color-mix(in oklab, var(--accent) ${dark ? 22 : 14}%, var(--surface))`,

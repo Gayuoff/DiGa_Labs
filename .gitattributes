@@ -1,0 +1,12 @@
+# Store text with LF line endings everywhere (the app deploys to Linux containers).
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF.
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

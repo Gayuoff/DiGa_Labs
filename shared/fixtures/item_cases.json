@@ -1,0 +1,148 @@
+{
+  "cases": [
+    {
+      "name": "valid assignment",
+      "type": "assignment",
+      "data": {
+        "status": "doing",
+        "due": "2026-10-20"
+      },
+      "error": null
+    },
+    {
+      "name": "null clears a field",
+      "type": "assignment",
+      "data": {
+        "due": null
+      },
+      "error": null
+    },
+    {
+      "name": "valid multi-select",
+      "type": "note",
+      "data": {
+        "tags": [
+          "inbox",
+          "exam"
+        ],
+        "body": "text"
+      },
+      "error": null
+    },
+    {
+      "name": "valid number",
+      "type": "subject",
+      "data": {
+        "credits": 4
+      },
+      "error": null
+    },
+    {
+      "name": "unknown type",
+      "type": "exam",
+      "data": {},
+      "error": "unknown type 'exam'"
+    },
+    {
+      "name": "unknown field",
+      "type": "assignment",
+      "data": {
+        "grade": "A"
+      },
+      "error": "type 'assignment' has no field 'grade'"
+    },
+    {
+      "name": "option not in the list",
+      "type": "assignment",
+      "data": {
+        "status": "blocked"
+      },
+      "error": "'blocked' is not an option"
+    },
+    {
+      "name": "select needs text",
+      "type": "assignment",
+      "data": {
+        "status": 3
+      },
+      "error": "expected an option key"
+    },
+    {
+      "name": "bad date",
+      "type": "assignment",
+      "data": {
+        "due": "20/10/2026"
+      },
+      "error": "expected a date (YYYY-MM-DD)"
+    },
+    {
+      "name": "impossible date",
+      "type": "assignment",
+      "data": {
+        "due": "2026-02-30"
+      },
+      "error": "expected a date (YYYY-MM-DD)"
+    },
+    {
+      "name": "number as text",
+      "type": "subject",
+      "data": {
+        "credits": "four"
+      },
+      "error": "expected a number"
+    },
+    {
+      "name": "boolean is not a number",
+      "type": "subject",
+      "data": {
+        "credits": true
+      },
+      "error": "expected a number"
+    },
+    {
+      "name": "multi-select needs a list",
+      "type": "note",
+      "data": {
+        "tags": "inbox"
+      },
+      "error": "expected a list of option keys"
+    },
+    {
+      "name": "multi-select repeats",
+      "type": "note",
+      "data": {
+        "tags": [
+          "inbox",
+          "inbox"
+        ]
+      },
+      "error": "repeats 'inbox'"
+    },
+    {
+      "name": "multi-select unknown",
+      "type": "note",
+      "data": {
+        "tags": [
+          "urgent"
+        ]
+      },
+      "error": "'urgent' is not an option"
+    },
+    {
+      "name": "text needs a string",
+      "type": "note",
+      "data": {
+        "body": 42
+      },
+      "error": "expected text"
+    },
+    {
+      "name": "relations are links",
+      "type": "assignment",
+      "data": {
+        "subject": "s1"
+      },
+      "error": "relations are stored as links"
+    }
+  ]
+}

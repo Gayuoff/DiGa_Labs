@@ -1,27 +1,15 @@
-import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 import { Circle } from "lucide-react";
+import { ICONS } from "./icons";
 
 interface IconProps {
-  /** A lucide icon name from a spec, e.g. "book-open". */
+  /** An icon name from a spec, e.g. "book-open". See ICONS for the full set. */
   name: string | null | undefined;
   size?: number;
   className?: string;
 }
 
-/**
- * Icons named by a spec load one by one, so a workspace downloads only the icons it uses.
- * Unknown names fall back to a neutral dot instead of breaking the layout.
- */
+/** A spec-named icon. Unknown names fall back to a neutral dot instead of breaking the layout. */
 export function Icon({ name, size = 16, className }: IconProps) {
-  const fallback = () => <Circle size={size} className={className} aria-hidden />;
-  if (!name) return fallback();
-  return (
-    <DynamicIcon
-      name={name as IconName}
-      size={size}
-      className={className}
-      fallback={fallback}
-      aria-hidden
-    />
-  );
+  const Component = (name && ICONS[name]) || Circle;
+  return <Component size={size} className={className} aria-hidden />;
 }

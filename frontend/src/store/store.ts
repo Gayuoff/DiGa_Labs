@@ -1,4 +1,5 @@
-import type { Event, EventType, Item, Origin, Query, Relation } from "../domain";
+import type { Event, EventType, Item, Origin, Query, Relation, Spec } from "../domain";
+import { checkItemData, checkSpec } from "../spec/validate";
 import { type Attrs, type EventMeta, invertEvent, mergeData, patchItem } from "./apply";
 import { newId } from "./ids";
 import { jsonEqual } from "./json";
@@ -16,6 +17,7 @@ export const topics = {
   item: (id: string) => `item:${id}`,
   relations: (itemId: string) => `relations:${itemId}`,
   history: "history",
+  spec: "spec",
 } as const;
 
 export class StoreError extends Error {}
@@ -58,6 +60,7 @@ interface Pending {
   batch: Batch;
   priorItems: Map<string, Item | undefined>;
   priorRelations: Map<string, Relation | undefined>;
+  priorSpec?: { value: Spec | null };
 }
 
 const NO_RELATIONS: readonly Relation[] = Object.freeze([]);
@@ -68,10 +71,16 @@ const NO_RELATIONS: readonly Relation[] = Object.freeze([]);
  *
  * One user action is one batch: one undo step, one persistence write, one round of notifications.
  * Items are immutable; a change replaces the object, so React can compare by reference.
+ *
+ * The workspace's spec lives here too: structure changes are events like data changes, so they
+ * undo, persist and sync the same way. Once a spec is set, every spec change and every item write
+ * is validated against it, and an invalid one is rejected (rolling back its whole batch).
  */
 export class WorkspaceStore {
   readonly workspaceId: string;
   readonly actorId: string;
+
+  private specState: Spec | null = null;
 
   private readonly persistence: Persistence | undefined;
   private readonly now: () => Date;
@@ -114,6 +123,10 @@ export class WorkspaceStore {
   async load(): Promise<void> {
     if (!this.persistence) return;
     const snapshot = await this.persistence.load(this.workspaceId);
+    if (snapshot.spec) {
+      this.specState = snapshot.spec;
+      this.touched.add(topics.spec);
+    }
     for (const item of snapshot.items) this.putItem(item);
     for (const relation of snapshot.relations) this.putRelation(relation);
     this.outbox = snapshot.outbox;
@@ -169,6 +182,11 @@ export class WorkspaceStore {
     return this.historyState;
   }
 
+  /** The workspace's structure, or null before one is set. */
+  get spec(): Spec | null {
+    return this.specState;
+  }
+
   /** Events waiting for server sync, oldest first. */
   pendingSync(): readonly Event[] {
     return this.outbox;
@@ -186,8 +204,25 @@ export class WorkspaceStore {
 
   // --- Commands --------------------------------------------------------------------------------
 
+  /** Sets the first spec of a new workspace. Not undoable: there is nothing to go back to. */
+  initSpec(spec: Spec): void {
+    if (this.specState) return;
+    this.transact(() => this.changeSpec(spec), "system");
+  }
+
+  /** Replaces the spec; rejected (and rolled back) unless the new spec is valid. */
+  changeSpec(next: Spec, origin: Origin = "user"): void {
+    this.transact(() => {
+      if (jsonEqual(next, this.specState)) return;
+      const errors = checkSpec(next);
+      if (errors.length > 0) throw new StoreError(`invalid spec:\n- ${errors.join("\n- ")}`);
+      this.record("spec.changed", this.workspaceId, { spec: this.specState }, { spec: next });
+    }, origin);
+  }
+
   create(draft: ItemDraft): Item {
     return this.transact(() => {
+      this.checkData(draft.type, draft.data ?? {});
       const at = this.timestamp();
       const item: Item = {
         id: newId(),
@@ -211,6 +246,7 @@ export class WorkspaceStore {
   update(id: string, patch: ItemPatch): Item {
     return this.transact(() => {
       const current = this.requireLive(id);
+      if (patch.data) this.checkData(current.type, patch.data);
       const before: Attrs = {};
       const after: Attrs = {};
       if (patch.title !== undefined && patch.title !== current.title) {
@@ -419,17 +455,38 @@ export class WorkspaceStore {
         this.rememberRelation(event.targetId);
         this.dropRelation(event.targetId);
         break;
-      case "spec.changed":
+      case "spec.changed": {
+        const pending = this.pending;
+        if (pending && !pending.priorSpec) pending.priorSpec = { value: this.specState };
+        this.specState = (event.after?.spec ?? null) as Spec | null;
+        this.touched.add(topics.spec);
         break;
+      }
     }
+  }
+
+  private checkData(type: string, data: Attrs): void {
+    if (!this.specState) return;
+    const errors = checkItemData(this.specState, type, data);
+    if (errors.length > 0) throw new StoreError(errors.join("; "));
   }
 
   private persist(batch: Batch): void {
     const persistence = this.persistence;
     if (!persistence) return;
-    const change: Change = { items: [], relations: [], removedRelationIds: [], events: batch.events };
+    const change: Change = {
+      workspaceId: this.workspaceId,
+      items: [],
+      relations: [],
+      removedRelationIds: [],
+      events: batch.events,
+    };
     const seen = new Set<string>();
     for (const event of batch.events) {
+      if (event.type === "spec.changed") {
+        change.spec = this.specState;
+        continue;
+      }
       if (seen.has(event.targetId)) continue;
       seen.add(event.targetId);
       if (event.type.startsWith("item.")) {
@@ -454,6 +511,7 @@ export class WorkspaceStore {
       if (prior) this.putRelation(prior);
       else this.dropRelation(id);
     }
+    if (pending.priorSpec) this.specState = pending.priorSpec.value;
     // Listeners never saw the rolled-back state, so there is nothing to tell them.
     this.touched.clear();
   }

@@ -1,12 +1,17 @@
 import { clsx } from "clsx";
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { Icon } from "@/design/Icon";
 import { Kbd, MOD } from "@/design/Kbd";
 import { pagePath } from "./routes";
 import { useSpec } from "./spec";
 
-export function Sidebar({ onOpenPalette }: { onOpenPalette: () => void }) {
+interface SidebarProps {
+  onOpenPalette: () => void;
+  onNewPage: () => void;
+}
+
+export function Sidebar({ onOpenPalette, onNewPage }: SidebarProps) {
   const spec = useSpec();
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-line bg-surface md:flex">
@@ -47,6 +52,14 @@ export function Sidebar({ onOpenPalette }: { onOpenPalette: () => void }) {
             <span className="truncate">{page.title}</span>
           </NavLink>
         ))}
+        <button
+          type="button"
+          onClick={onNewPage}
+          className="flex w-full items-center gap-2.5 rounded px-2 py-1.5 text-sm text-muted transition-colors hover:bg-subtle hover:text-ink"
+        >
+          <Plus size={16} aria-hidden />
+          New page
+        </button>
       </nav>
 
       <p className="border-t border-line px-4 py-3 text-xs text-muted">Saved on this device</p>

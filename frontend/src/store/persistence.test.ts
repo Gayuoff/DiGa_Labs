@@ -1,5 +1,7 @@
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it } from "vitest";
+import { renameView } from "../spec/ops";
+import { STUDY_HQ } from "../workspace/examples";
 import { indexedDbPersistence } from "./persistence";
 import { WorkspaceStore } from "./store";
 
@@ -29,6 +31,17 @@ describe("IndexedDB persistence", () => {
     expect(reopened.item(b.id)?.deletedAt).not.toBeNull();
     expect(reopened.relationsOf(a.id)).toEqual([kept]);
     expect(reopened.pendingSync().map((e) => e.id)).toEqual(store.pendingSync().map((e) => e.id));
+  });
+
+  it("restores the spec, including structure changes", async () => {
+    const factory = new IDBFactory();
+    const store = await open(factory);
+    store.initSpec(STUDY_HQ);
+    store.changeSpec(renameView(STUDY_HQ, "inbox", "Capture"));
+    await store.flushed();
+    const reopened = await open(factory);
+    expect(reopened.spec).toEqual(store.spec);
+    expect(reopened.spec?.views.find((v) => v.key === "inbox")?.title).toBe("Capture");
   });
 
   it("keeps workspaces apart", async () => {

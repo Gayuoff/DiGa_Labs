@@ -18,10 +18,12 @@ async function openStore(): Promise<WorkspaceStore> {
 }
 
 void openStore().then((store) => {
+  // Until the Architect AI (step 2) builds workspaces from a prompt, start from Study HQ.
+  store.initSpec(STUDY_HQ);
   if (store.isEmpty()) seedStudyHq(store);
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
-      <App store={store} spec={STUDY_HQ} />
+      <App store={store} />
     </StrictMode>,
   );
 });

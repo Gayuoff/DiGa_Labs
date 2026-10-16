@@ -1,4 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
+import { renameView } from "../spec/ops";
+import { STUDY_HQ } from "../workspace/examples";
 import { makeQuery } from "./query";
 import { StoreError, topics, WorkspaceStore } from "./store";
 
@@ -182,6 +184,73 @@ describe("transactions", () => {
     expect(listener).not.toHaveBeenCalled();
     store.undo();
     expect(titles(store)).toEqual([]);
+  });
+});
+
+describe("spec", () => {
+  function withSpec() {
+    const store = makeStore();
+    store.initSpec(STUDY_HQ);
+    return store;
+  }
+
+  it("sets the first spec without offering it for undo", () => {
+    const store = withSpec();
+    expect(store.spec?.name).toBe("Study HQ");
+    expect(store.history.canUndo).toBe(false);
+    store.initSpec({ ...STUDY_HQ, name: "Other" });
+    expect(store.spec?.name).toBe("Study HQ");
+  });
+
+  it("undoes and redoes structure changes and notifies spec listeners", () => {
+    const store = withSpec();
+    const listener = vi.fn();
+    store.subscribe(topics.spec, listener);
+    store.changeSpec(renameView(STUDY_HQ, "inbox", "Capture"));
+    expect(store.spec?.views.find((v) => v.key === "inbox")?.title).toBe("Capture");
+    store.undo();
+    expect(store.spec).toEqual(STUDY_HQ);
+    store.redo();
+    expect(store.spec?.views.find((v) => v.key === "inbox")?.title).toBe("Capture");
+    expect(listener).toHaveBeenCalledTimes(3);
+  });
+
+  it("rejects an invalid spec and keeps the current one", () => {
+    const store = withSpec();
+    const broken = structuredClone(STUDY_HQ);
+    broken.views[0]!.groupBy = "due";
+    expect(() => store.changeSpec(broken)).toThrow("must be a select field");
+    expect(store.spec).toEqual(STUDY_HQ);
+    expect(store.pendingSync()).toHaveLength(1);
+  });
+
+  it("records nothing for an unchanged spec", () => {
+    const store = withSpec();
+    store.changeSpec(structuredClone(STUDY_HQ));
+    expect(store.pendingSync()).toHaveLength(1);
+    expect(store.history.canUndo).toBe(false);
+  });
+
+  it("checks item data against field types once a spec is set", () => {
+    const store = withSpec();
+    expect(() => store.create({ type: "assignment", data: { status: "blocked" } })).toThrow(
+      "'blocked' is not an option",
+    );
+    expect(() => store.create({ type: "exam" })).toThrow("unknown type 'exam'");
+    const item = store.create({ type: "assignment", data: { status: "todo" } });
+    expect(() => store.update(item.id, { data: { due: "next week" } })).toThrow("expected a date");
+    expect(store.item(item.id)?.data).toEqual({ status: "todo" });
+  });
+
+  it("rolls back a spec change made in a failing transaction", () => {
+    const store = withSpec();
+    expect(() =>
+      store.transact(() => {
+        store.changeSpec(renameView(STUDY_HQ, "inbox", "Capture"));
+        throw new Error("boom");
+      }),
+    ).toThrow("boom");
+    expect(store.spec).toEqual(STUDY_HQ);
   });
 });
 

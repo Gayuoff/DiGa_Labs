@@ -1,0 +1,6155 @@
+{
+  "cases": [
+    {
+      "name": "board needs groupBy",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "board view needs groupBy"
+    },
+    {
+      "name": "groupBy must be a select field",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "due",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "groupBy 'due' must be a select field"
+    },
+    {
+      "name": "calendar needs dateField",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "calendar view needs dateField"
+    },
+    {
+      "name": "dateField must be a date",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "priority",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "dateField 'priority' must be a date field"
+    },
+    {
+      "name": "view of an unknown type",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "exam",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "unknown type 'exam'"
+    },
+    {
+      "name": "sort on an unknown field",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "deadline"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "has no field 'deadline'"
+    },
+    {
+      "name": "duplicate view key",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "duplicate view key 'inbox'"
+    },
+    {
+      "name": "duplicate page key",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          },
+          {
+            "key": "home",
+            "title": "Home again"
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "duplicate page key 'home'"
+    },
+    {
+      "name": "block of an unknown view",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "habits",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "unknown view 'habits'"
+    },
+    {
+      "name": "overlapping blocks",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 6,
+                "y": 8,
+                "w": 6,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "overlap"
+    },
+    {
+      "name": "block past the grid",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 6,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "runs past column 12"
+    },
+    {
+      "name": "relation to an unknown type",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "course"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "unknown type 'course'"
+    },
+    {
+      "name": "select without options",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "needs at least one option"
+    },
+    {
+      "name": "reserved field key",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "title",
+                "label": "Title",
+                "type": "text"
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "field key 'title' is reserved"
+    },
+    {
+      "name": "'in' without a list",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "in",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "'in' needs a list value"
+    },
+    {
+      "name": "rule on an unknown field",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "grade",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": null
+      },
+      "error": "type 'assignment' has no field 'grade'"
+    },
+    {
+      "name": "phase outside the journey",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": {
+          "lengthDays": 30,
+          "phases": [
+            {
+              "key": "learn",
+              "title": "Learn",
+              "startDay": 1,
+              "endDay": 10
+            },
+            {
+              "key": "ship",
+              "title": "Ship",
+              "startDay": 11,
+              "endDay": 31
+            }
+          ]
+        }
+      },
+      "error": "outside the 30-day journey"
+    },
+    {
+      "name": "overlapping phases",
+      "spec": {
+        "formatVersion": 1,
+        "name": "Study HQ",
+        "description": null,
+        "theme": {
+          "accent": "#0ea5e9",
+          "tone": "calm",
+          "density": "comfortable",
+          "radius": "md",
+          "mode": "system"
+        },
+        "types": [
+          {
+            "key": "assignment",
+            "label": "Assignment",
+            "icon": "book-open",
+            "fields": [
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "todo",
+                    "label": "To start",
+                    "color": "#94a3b8"
+                  },
+                  {
+                    "key": "doing",
+                    "label": "In progress",
+                    "color": "#3b82f6"
+                  },
+                  {
+                    "key": "done",
+                    "label": "Submitted",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "due",
+                "label": "Due",
+                "type": "date",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "priority",
+                "label": "Priority",
+                "type": "select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "high",
+                    "label": "High",
+                    "color": "#ef4444"
+                  },
+                  {
+                    "key": "medium",
+                    "label": "Medium",
+                    "color": "#f59e0b"
+                  },
+                  {
+                    "key": "low",
+                    "label": "Low",
+                    "color": "#22c55e"
+                  }
+                ],
+                "targetType": null
+              },
+              {
+                "key": "subject",
+                "label": "Subject",
+                "type": "relation",
+                "required": false,
+                "options": [],
+                "targetType": "subject"
+              }
+            ]
+          },
+          {
+            "key": "subject",
+            "label": "Subject",
+            "icon": "library",
+            "fields": [
+              {
+                "key": "credits",
+                "label": "Credits",
+                "type": "number",
+                "required": false,
+                "options": [],
+                "targetType": null
+              }
+            ]
+          },
+          {
+            "key": "note",
+            "label": "Note",
+            "icon": "notebook-pen",
+            "fields": [
+              {
+                "key": "body",
+                "label": "Body",
+                "type": "long_text",
+                "required": false,
+                "options": [],
+                "targetType": null
+              },
+              {
+                "key": "tags",
+                "label": "Tags",
+                "type": "multi_select",
+                "required": false,
+                "options": [
+                  {
+                    "key": "inbox",
+                    "label": "Inbox",
+                    "color": null
+                  },
+                  {
+                    "key": "exam",
+                    "label": "Exam",
+                    "color": null
+                  }
+                ],
+                "targetType": null
+              }
+            ]
+          }
+        ],
+        "views": [
+          {
+            "key": "assignments_board",
+            "title": "Assignments",
+            "display": "board",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": "status",
+            "dateField": null,
+            "fields": [
+              "due",
+              "priority"
+            ],
+            "options": {}
+          },
+          {
+            "key": "deadlines",
+            "title": "Deadline calendar",
+            "display": "calendar",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": "due",
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "inbox",
+            "title": "Inbox",
+            "display": "list",
+            "query": {
+              "type": "note",
+              "where": [
+                {
+                  "field": "tags",
+                  "op": "contains",
+                  "value": "inbox"
+                }
+              ],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          },
+          {
+            "key": "assignment_table",
+            "title": "All assignments",
+            "display": "table",
+            "query": {
+              "type": "assignment",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "due",
+                  "dir": "asc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [
+              "status",
+              "due",
+              "priority",
+              "subject"
+            ],
+            "options": {}
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "display": "doc",
+            "query": {
+              "type": "note",
+              "where": [],
+              "match": "all",
+              "sort": [
+                {
+                  "field": "created_at",
+                  "dir": "desc"
+                }
+              ],
+              "limit": null
+            },
+            "groupBy": null,
+            "dateField": null,
+            "fields": [],
+            "options": {}
+          }
+        ],
+        "pages": [
+          {
+            "key": "home",
+            "title": "Home",
+            "icon": "house",
+            "blocks": [
+              {
+                "view": "assignments_board",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+              },
+              {
+                "view": "deadlines",
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+              },
+              {
+                "view": "inbox",
+                "x": 8,
+                "y": 8,
+                "w": 4,
+                "h": 8
+              }
+            ]
+          },
+          {
+            "key": "planner",
+            "title": "Planner",
+            "icon": "table-2",
+            "blocks": [
+              {
+                "view": "assignment_table",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 12
+              }
+            ]
+          },
+          {
+            "key": "notes",
+            "title": "Notes",
+            "icon": "notebook-pen",
+            "blocks": [
+              {
+                "view": "notes",
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 16
+              }
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "key": "submitted_xp",
+            "title": "Reward submissions",
+            "enabled": true,
+            "when": {
+              "on": "item.updated",
+              "type": "assignment",
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "done"
+                }
+              ]
+            },
+            "then": [
+              {
+                "do": "award",
+                "args": {
+                  "points": 50
+                }
+              }
+            ]
+          }
+        ],
+        "journey": {
+          "lengthDays": 30,
+          "phases": [
+            {
+              "key": "learn",
+              "title": "Learn",
+              "startDay": 1,
+              "endDay": 12
+            },
+            {
+              "key": "build",
+              "title": "Build",
+              "startDay": 10,
+              "endDay": 20
+            }
+          ]
+        }
+      },
+      "error": "phases 'learn' and 'build' overlap"
+    }
+  ]
+}

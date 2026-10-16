@@ -1,12 +1,9 @@
-import { createContext, useContext } from "react";
 import type { Spec } from "@/domain";
+import { useWorkspaceSpec } from "@/store";
 
-const SpecContext = createContext<Spec | null>(null);
-
-export const SpecProvider = SpecContext.Provider;
-
+/** The current workspace spec, live from the store. The app sets one before rendering. */
 export function useSpec(): Spec {
-  const spec = useContext(SpecContext);
-  if (!spec) throw new Error("useSpec must be used inside <SpecProvider>");
+  const spec = useWorkspaceSpec();
+  if (!spec) throw new Error("The workspace has no spec yet");
   return spec;
 }

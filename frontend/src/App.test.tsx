@@ -22,8 +22,9 @@ afterEach(cleanup);
 
 function renderApp() {
   const store = new WorkspaceStore({ workspaceId: "test", actorId: "tester" });
+  store.initSpec(STUDY_HQ);
   seedStudyHq(store, new Date("2026-10-16T09:00:00Z"));
-  render(<App store={store} spec={STUDY_HQ} />);
+  render(<App store={store} />);
   return store;
 }
 

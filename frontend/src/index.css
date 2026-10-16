@@ -49,6 +49,17 @@
     min-height: calc(var(--row-h) * 6);
   }
 
+  /* Layout editor (react-grid-layout) in the workspace's own colours. */
+  .react-grid-item.react-grid-placeholder {
+    background: var(--accent);
+    opacity: 0.15;
+    border-radius: var(--radius);
+  }
+
+  .react-grid-item > .react-resizable-handle::after {
+    border-color: var(--muted);
+  }
+
   @media (min-width: 768px) {
     .sb-grid {
       grid-template-columns: repeat(12, minmax(0, 1fr));

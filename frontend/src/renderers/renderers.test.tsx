@@ -5,7 +5,6 @@ import type { ComponentType } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { StoreProvider, useQuery, WorkspaceStore } from "@/store";
 import { seedStudyHq, STUDY_HQ } from "@/workspace/examples";
-import { SpecProvider } from "@/workspace/spec";
 import BoardView from "./board/BoardView";
 import CalendarView from "./calendar/CalendarView";
 import DocView from "./doc/DocView";
@@ -21,6 +20,7 @@ const seedDay = new Date(now.getFullYear(), now.getMonth(), 10);
 
 function renderView(viewKey: string, Renderer: ComponentType<RendererProps>) {
   const store = new WorkspaceStore({ workspaceId: "test", actorId: "tester" });
+  store.initSpec(STUDY_HQ);
   seedStudyHq(store, seedDay);
   const view = STUDY_HQ.views.find((v) => v.key === viewKey)!;
   const type = STUDY_HQ.types.find((t) => t.key === view.query.type)!;
@@ -30,9 +30,7 @@ function renderView(viewKey: string, Renderer: ComponentType<RendererProps>) {
   }
   render(
     <StoreProvider value={store}>
-      <SpecProvider value={STUDY_HQ}>
-        <Harness />
-      </SpecProvider>
+      <Harness />
     </StoreProvider>,
   );
   return store;

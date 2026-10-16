@@ -13,6 +13,7 @@ export default {
         line: "var(--line)",
         ink: "var(--ink)",
         muted: "var(--muted)",
+        danger: "var(--danger)",
         accent: {
           DEFAULT: "var(--accent)",
           fg: "var(--accent-fg)",
