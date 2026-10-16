@@ -1,0 +1,1182 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Second Brain domain",
+    "version": "0.1.0"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Action": {
+        "additionalProperties": false,
+        "properties": {
+          "do": {
+            "$ref": "#/components/schemas/ActionKind"
+          },
+          "args": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "default": {},
+            "title": "Args",
+            "type": "object"
+          }
+        },
+        "required": [
+          "do",
+          "args"
+        ],
+        "title": "Action",
+        "type": "object"
+      },
+      "ActionKind": {
+        "enum": [
+          "set_field",
+          "create_item",
+          "award",
+          "notify"
+        ],
+        "title": "ActionKind",
+        "type": "string"
+      },
+      "Actor": {
+        "additionalProperties": false,
+        "description": "Anyone who can act on a workspace: a person, the Architect AI, or an agent.",
+        "properties": {
+          "id": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/ActorKind"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name"
+        ],
+        "title": "Actor",
+        "type": "object"
+      },
+      "ActorKind": {
+        "enum": [
+          "human",
+          "ai",
+          "agent",
+          "system"
+        ],
+        "title": "ActorKind",
+        "type": "string"
+      },
+      "Condition": {
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Field",
+            "type": "string"
+          },
+          "op": {
+            "$ref": "#/components/schemas/Op"
+          },
+          "value": {
+            "$ref": "#/components/schemas/JsonValue",
+            "default": null
+          }
+        },
+        "required": [
+          "field",
+          "op",
+          "value"
+        ],
+        "title": "Condition",
+        "type": "object"
+      },
+      "Display": {
+        "enum": [
+          "list",
+          "board",
+          "table",
+          "calendar",
+          "timeline",
+          "gallery",
+          "doc",
+          "chart",
+          "progress"
+        ],
+        "title": "Display",
+        "type": "string"
+      },
+      "Event": {
+        "additionalProperties": false,
+        "description": "One append-only entry in the workspace log: the source of truth for history and undo.\n\n`before` and `after` hold only the attributes that changed, so swapping them inverts the event.\nEvents sharing a `batch_id` came from one user action and are undone together.",
+        "properties": {
+          "id": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspaceId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Workspaceid",
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "targetId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Targetid",
+            "type": "string"
+          },
+          "actorId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Actorid",
+            "type": "string"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/Origin",
+            "default": "user"
+          },
+          "batchId": {
+            "anyOf": [
+              {
+                "pattern": "^[A-Za-z0-9_-]{1,128}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Batchid"
+          },
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/JsonValue"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Before"
+          },
+          "after": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/JsonValue"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "After"
+          }
+        },
+        "required": [
+          "id",
+          "workspaceId",
+          "type",
+          "targetId",
+          "actorId",
+          "origin",
+          "batchId",
+          "at",
+          "before",
+          "after"
+        ],
+        "title": "Event",
+        "type": "object"
+      },
+      "EventType": {
+        "enum": [
+          "item.created",
+          "item.updated",
+          "item.deleted",
+          "item.restored",
+          "relation.created",
+          "relation.deleted",
+          "spec.changed"
+        ],
+        "title": "EventType",
+        "type": "string"
+      },
+      "FieldDef": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/FieldType"
+          },
+          "required": {
+            "default": false,
+            "title": "Required",
+            "type": "boolean"
+          },
+          "options": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "maxItems": 50,
+            "title": "Options",
+            "type": "array"
+          },
+          "targetType": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z][a-z0-9_]{0,47}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Targettype"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "type",
+          "required",
+          "options",
+          "targetType"
+        ],
+        "title": "FieldDef",
+        "type": "object"
+      },
+      "FieldType": {
+        "enum": [
+          "text",
+          "long_text",
+          "number",
+          "checkbox",
+          "date",
+          "datetime",
+          "select",
+          "multi_select",
+          "relation",
+          "url",
+          "file",
+          "ink"
+        ],
+        "title": "FieldType",
+        "type": "string"
+      },
+      "Item": {
+        "additionalProperties": false,
+        "description": "Any record in a workspace: task, note, client, medicine, quest. Its spec type gives it shape.\n\nWidgets never own items; every view is a query over the same pool.",
+        "properties": {
+          "id": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspaceId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Workspaceid",
+            "type": "string"
+          },
+          "type": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Type",
+            "type": "string"
+          },
+          "title": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Title",
+            "type": "string"
+          },
+          "data": {
+            "default": {},
+            "patternProperties": {
+              "^[a-z][a-z0-9_]{0,47}$": {
+                "$ref": "#/components/schemas/JsonValue"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          },
+          "createdBy": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Createdby",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "title": "Createdat",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "title": "Updatedat",
+            "type": "string"
+          },
+          "deletedAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Deletedat"
+          },
+          "version": {
+            "default": 1,
+            "minimum": 1,
+            "title": "Version",
+            "type": "integer"
+          },
+          "sample": {
+            "default": false,
+            "title": "Sample",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "workspaceId",
+          "type",
+          "title",
+          "data",
+          "createdBy",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "version",
+          "sample"
+        ],
+        "title": "Item",
+        "type": "object"
+      },
+      "Journey": {
+        "additionalProperties": false,
+        "properties": {
+          "lengthDays": {
+            "maximum": 3650,
+            "minimum": 1,
+            "title": "Lengthdays",
+            "type": "integer"
+          },
+          "startsOn": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Startson"
+          },
+          "phases": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Phase"
+            },
+            "maxItems": 20,
+            "title": "Phases",
+            "type": "array"
+          }
+        },
+        "required": [
+          "lengthDays",
+          "startsOn",
+          "phases"
+        ],
+        "title": "Journey",
+        "type": "object"
+      },
+      "JsonValue": {},
+      "ObjectType": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9-]{1,40}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Icon"
+          },
+          "fields": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/FieldDef"
+            },
+            "maxItems": 64,
+            "title": "Fields",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "icon",
+          "fields"
+        ],
+        "title": "ObjectType",
+        "type": "object"
+      },
+      "Op": {
+        "enum": [
+          "eq",
+          "neq",
+          "in",
+          "not_in",
+          "contains",
+          "gt",
+          "gte",
+          "lt",
+          "lte",
+          "is_empty",
+          "is_not_empty"
+        ],
+        "title": "Op",
+        "type": "string"
+      },
+      "Option": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "pattern": "^#[0-9a-fA-F]{6}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Color"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "color"
+        ],
+        "title": "Option",
+        "type": "object"
+      },
+      "Origin": {
+        "description": "Who caused a change. Lets the UI undo or explain AI and agent changes separately.",
+        "enum": [
+          "user",
+          "ai",
+          "agent",
+          "system"
+        ],
+        "title": "Origin",
+        "type": "string"
+      },
+      "Page": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Key",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9-]{1,40}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Icon"
+          },
+          "blocks": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Placement"
+            },
+            "maxItems": 24,
+            "title": "Blocks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "title",
+          "icon",
+          "blocks"
+        ],
+        "title": "Page",
+        "type": "object"
+      },
+      "Phase": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Key",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "startDay": {
+            "minimum": 1,
+            "title": "Startday",
+            "type": "integer"
+          },
+          "endDay": {
+            "minimum": 1,
+            "title": "Endday",
+            "type": "integer"
+          },
+          "views": {
+            "default": [],
+            "items": {
+              "pattern": "^[a-z][a-z0-9_]{0,47}$",
+              "type": "string"
+            },
+            "title": "Views",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "title",
+          "startDay",
+          "endDay",
+          "views"
+        ],
+        "title": "Phase",
+        "type": "object"
+      },
+      "Placement": {
+        "additionalProperties": false,
+        "properties": {
+          "view": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "View",
+            "type": "string"
+          },
+          "x": {
+            "exclusiveMaximum": 12,
+            "minimum": 0,
+            "title": "X",
+            "type": "integer"
+          },
+          "y": {
+            "minimum": 0,
+            "title": "Y",
+            "type": "integer"
+          },
+          "w": {
+            "maximum": 12,
+            "minimum": 1,
+            "title": "W",
+            "type": "integer"
+          },
+          "h": {
+            "maximum": 48,
+            "minimum": 1,
+            "title": "H",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "view",
+          "x",
+          "y",
+          "w",
+          "h"
+        ],
+        "title": "Placement",
+        "type": "object"
+      },
+      "Query": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Type",
+            "type": "string"
+          },
+          "where": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Condition"
+            },
+            "maxItems": 20,
+            "title": "Where",
+            "type": "array"
+          },
+          "match": {
+            "default": "all",
+            "enum": [
+              "all",
+              "any"
+            ],
+            "title": "Match",
+            "type": "string"
+          },
+          "sort": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Sort"
+            },
+            "maxItems": 5,
+            "title": "Sort",
+            "type": "array"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "maximum": 10000,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Limit"
+          }
+        },
+        "required": [
+          "type",
+          "where",
+          "match",
+          "sort",
+          "limit"
+        ],
+        "title": "Query",
+        "type": "object"
+      },
+      "Relation": {
+        "additionalProperties": false,
+        "description": "A directed link between two items, e.g. assignment -> subject. Together: the graph.",
+        "properties": {
+          "id": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "workspaceId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Workspaceid",
+            "type": "string"
+          },
+          "kind": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Kind",
+            "type": "string"
+          },
+          "fromId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Fromid",
+            "type": "string"
+          },
+          "toId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Toid",
+            "type": "string"
+          },
+          "createdBy": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Createdby",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "title": "Createdat",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workspaceId",
+          "kind",
+          "fromId",
+          "toId",
+          "createdBy",
+          "createdAt"
+        ],
+        "title": "Relation",
+        "type": "object"
+      },
+      "Rule": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Key",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "enabled": {
+            "default": true,
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "when": {
+            "$ref": "#/components/schemas/Trigger"
+          },
+          "then": {
+            "items": {
+              "$ref": "#/components/schemas/Action"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Then",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "title",
+          "enabled",
+          "when",
+          "then"
+        ],
+        "title": "Rule",
+        "type": "object"
+      },
+      "Sort": {
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Field",
+            "type": "string"
+          },
+          "dir": {
+            "default": "asc",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "title": "Dir",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "dir"
+        ],
+        "title": "Sort",
+        "type": "object"
+      },
+      "Spec": {
+        "additionalProperties": false,
+        "properties": {
+          "formatVersion": {
+            "const": 1,
+            "default": 1,
+            "title": "Formatversion",
+            "type": "integer"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "theme": {
+            "$ref": "#/components/schemas/Theme",
+            "default": {
+              "accent": "#6366f1",
+              "tone": "professional",
+              "density": "comfortable",
+              "radius": "md",
+              "mode": "system"
+            }
+          },
+          "types": {
+            "items": {
+              "$ref": "#/components/schemas/ObjectType"
+            },
+            "maxItems": 32,
+            "minItems": 1,
+            "title": "Types",
+            "type": "array"
+          },
+          "views": {
+            "items": {
+              "$ref": "#/components/schemas/View"
+            },
+            "maxItems": 64,
+            "minItems": 1,
+            "title": "Views",
+            "type": "array"
+          },
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/Page"
+            },
+            "maxItems": 32,
+            "minItems": 1,
+            "title": "Pages",
+            "type": "array"
+          },
+          "rules": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Rule"
+            },
+            "maxItems": 64,
+            "title": "Rules",
+            "type": "array"
+          },
+          "journey": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Journey"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "formatVersion",
+          "name",
+          "description",
+          "theme",
+          "types",
+          "views",
+          "pages",
+          "rules",
+          "journey"
+        ],
+        "title": "Spec",
+        "type": "object"
+      },
+      "Theme": {
+        "additionalProperties": false,
+        "properties": {
+          "accent": {
+            "default": "#6366f1",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "title": "Accent",
+            "type": "string"
+          },
+          "tone": {
+            "$ref": "#/components/schemas/Tone",
+            "default": "professional"
+          },
+          "density": {
+            "default": "comfortable",
+            "enum": [
+              "compact",
+              "comfortable",
+              "spacious"
+            ],
+            "title": "Density",
+            "type": "string"
+          },
+          "radius": {
+            "default": "md",
+            "enum": [
+              "none",
+              "sm",
+              "md",
+              "lg"
+            ],
+            "title": "Radius",
+            "type": "string"
+          },
+          "mode": {
+            "default": "system",
+            "enum": [
+              "light",
+              "dark",
+              "system"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accent",
+          "tone",
+          "density",
+          "radius",
+          "mode"
+        ],
+        "title": "Theme",
+        "type": "object"
+      },
+      "Tone": {
+        "enum": [
+          "professional",
+          "playful",
+          "calm",
+          "bold"
+        ],
+        "title": "Tone",
+        "type": "string"
+      },
+      "Trigger": {
+        "additionalProperties": false,
+        "properties": {
+          "on": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z][a-z0-9_]{0,47}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Type"
+          },
+          "where": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Condition"
+            },
+            "maxItems": 10,
+            "title": "Where",
+            "type": "array"
+          }
+        },
+        "required": [
+          "on",
+          "type",
+          "where"
+        ],
+        "title": "Trigger",
+        "type": "object"
+      },
+      "View": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]{0,47}$",
+            "title": "Key",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "display": {
+            "$ref": "#/components/schemas/Display"
+          },
+          "query": {
+            "$ref": "#/components/schemas/Query"
+          },
+          "groupBy": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z][a-z0-9_]{0,47}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Groupby"
+          },
+          "dateField": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z][a-z0-9_]{0,47}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Datefield"
+          },
+          "fields": {
+            "default": [],
+            "items": {
+              "pattern": "^[a-z][a-z0-9_]{0,47}$",
+              "type": "string"
+            },
+            "maxItems": 32,
+            "title": "Fields",
+            "type": "array"
+          },
+          "options": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "default": {},
+            "title": "Options",
+            "type": "object"
+          }
+        },
+        "required": [
+          "key",
+          "title",
+          "display",
+          "query",
+          "groupBy",
+          "dateField",
+          "fields",
+          "options"
+        ],
+        "title": "View",
+        "type": "object"
+      },
+      "Workspace": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "ownerId": {
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "title": "Ownerid",
+            "type": "string"
+          },
+          "specVersion": {
+            "default": 1,
+            "minimum": 1,
+            "title": "Specversion",
+            "type": "integer"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "title": "Createdat",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "title": "Updatedat",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "ownerId",
+          "specVersion",
+          "createdAt",
+          "updatedAt"
+        ],
+        "title": "Workspace",
+        "type": "object"
+      }
+    }
+  }
+}

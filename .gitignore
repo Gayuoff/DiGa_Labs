@@ -1,0 +1,24 @@
+# Node / frontend
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+
+# Python / backend
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+*service-account*.json
+
+# Firebase
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
