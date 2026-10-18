@@ -1,0 +1,6 @@
+# Copy to deploy-env.yaml (gitignored) and fill in real values before deploying.
+GEMINI_API_KEY: "your-ai-studio-key"
+GOOGLE_GENAI_USE_VERTEXAI: "false"
+GOOGLE_CLOUD_PROJECT: "project-c38d588c-62fa-4a6f-9ba"
+GOOGLE_CLOUD_LOCATION: "us-central1"
+CORS_ORIGINS: '["https://project-c38d588c-62fa-4a6f-9ba.web.app"]'

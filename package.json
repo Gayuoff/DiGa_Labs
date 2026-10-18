@@ -9,7 +9,9 @@
     "build:web": "npm run build -w frontend",
     "gen:api": "npm run gen:api -w frontend",
     "gen:domain": "npm run gen:domain -w frontend",
-    "emulators": "firebase emulators:start"
+    "emulators": "firebase emulators:start",
+    "deploy:web": "npm run build -w frontend && firebase deploy --only hosting",
+    "deploy:api": "gcloud run deploy second-brain-api --source backend --region us-central1 --allow-unauthenticated --env-vars-file backend/deploy-env.yaml"
   },
   "engines": {
     "node": ">=20"
